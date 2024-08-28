@@ -4,128 +4,118 @@ import com.mohran.udemy.dto.AdminDto;
 import com.mohran.udemy.dto.StudentDto;
 import com.mohran.udemy.model.Admin;
 import com.mohran.udemy.model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 public class ConvertStudentService {
-    public StudentDto convertStudentToStudentDto(Student student)
-    {
+
+    @Autowired
+    private ConvertCourseService convertCourseService;
+    @Autowired
+    private ConvertCourseReviewService convertCourseReviewService;
+    @Autowired
+    private ConvertStudentSectionProgressService convertStudentSectionProgressService;
+
+
+  public StudentDto convertStudentToStudentDto(Student student) {
         StudentDto studentDto = new StudentDto();
 
-        if(student.getId() != null) {
-            studentDto.setId(student.getId());
-        }
+        studentDto.setId(student.getId());
+        studentDto.setPassword(student.getPassword());
+        studentDto.setEmail(student.getEmail());
+        studentDto.setFirstName(student.getFirstName());
+        studentDto.setLastName(student.getLastName());
+        studentDto.setProfilePicture(student.getProfilePicture());
+        studentDto.setPhoneNumber(student.getPhoneNumber());
+        studentDto.setAddress(student.getAddress());
+        studentDto.setBio(student.getBio());
 
-        if(student.getFirstName() != null) {
-            studentDto.setFirstName(student.getFirstName());
-        }
 
-        if(student.getLastName() != null) {
-            studentDto.setLastName(student.getLastName());
-        }
 
-        if(student.getEmail() != null) {
-            studentDto.setEmail(student.getEmail());
-        }
+        studentDto.setEnrollments(student.getEnrollments().stream()
+                .map(x->convertCourseService.convertCourseToCourseDto(x))
+                .collect(Collectors.toSet()));
 
-        if(student.getPassword() != null) {
-            studentDto.setPassword(student.getPassword());
-        }
+        studentDto.setCompletedCourses(student.getCompletedCourses().stream()
+                .map(x->convertCourseService.convertCourseToCourseDto(x))
+                .collect(Collectors.toSet()));
 
-        if(student.getProfilePicture() != null) {
-            studentDto.setProfilePicture(student.getProfilePicture());
-        }
+        studentDto.setWishlistCourses(student.getWishlistCourses().stream()
+                .map(x->convertCourseService.convertCourseToCourseDto(x))
+                .collect(Collectors.toSet()));
 
-        if(student.getPhoneNumber() != null) {
-            studentDto.setPhoneNumber(student.getPhoneNumber());
-        }
+        studentDto.setFavourites(student.getFavourites().stream()
+                .map(x->convertCourseService.convertCourseToCourseDto(x))
+                .collect(Collectors.toSet()));
 
-        if(student.getAddress() != null) {
-            studentDto.setAddress(student.getAddress());
-        }
+        studentDto.setSectionProgress(student.getSectionProgress().stream()
+                .map(convertStudentSectionProgressService::convertEntityToDto)
+                .collect(Collectors.toList()));
 
-        if(student.getBio() != null) {
-            studentDto.setBio(student.getBio());
-        }
-
+        studentDto.setReviews(student.getReviews().stream()
+                .map(x->convertCourseReviewService.convertCourseReviewToCourseReviewDto(x))
+                .collect(Collectors.toList()));
 
         return studentDto;
     }
-    public Student convertStudentDtoToStudent(StudentDto studentDto){
+
+
+    public Student convertStudentDtoToStudent(StudentDto studentDto) {
         Student student = new Student();
-        if(studentDto.getId() != null) {
-            student.setId(studentDto.getId());
-        }
 
-        if(studentDto.getFirstName() != null) {
-            student.setFirstName(studentDto.getFirstName());
-        }
+        student.setId(studentDto.getId());
+        student.setPassword(studentDto.getPassword());
+        student.setEmail(studentDto.getEmail());
+        student.setFirstName(studentDto.getFirstName());
+        student.setLastName(studentDto.getLastName());
+        student.setProfilePicture(studentDto.getProfilePicture());
+        student.setPhoneNumber(studentDto.getPhoneNumber());
+        student.setAddress(studentDto.getAddress());
+        student.setBio(studentDto.getBio());
 
-        if(studentDto.getLastName() != null) {
-            student.setLastName(studentDto.getLastName());
-        }
 
-        if(studentDto.getEmail() != null) {
-            student.setEmail(studentDto.getEmail());
-        }
+        student.setEnrollments(studentDto.getEnrollments().stream()
+                .map(x->convertCourseService.convertCourseDtoToCourse(x))
+                .collect(Collectors.toSet()));
 
-        if(studentDto.getPassword() != null) {
-            student.setPassword(studentDto.getPassword());
-        }
+        student.setCompletedCourses(studentDto.getCompletedCourses().stream()
+                .map(x->convertCourseService.convertCourseDtoToCourse(x))
+                .collect(Collectors.toSet()));
 
-        if(studentDto.getProfilePicture() != null) {
-            student.setProfilePicture(studentDto.getProfilePicture());
-        }
+        student.setWishlistCourses(studentDto.getWishlistCourses().stream()
+                .map(x->convertCourseService.convertCourseDtoToCourse(x))
+                .collect(Collectors.toSet()));
 
-        if(studentDto.getPhoneNumber() != null) {
-            student.setPhoneNumber(studentDto.getPhoneNumber());
-        }
+        student.setFavourites(studentDto.getFavourites().stream()
+                .map(x->convertCourseService.convertCourseDtoToCourse(x))
+                .collect(Collectors.toSet()));
 
-        if(studentDto.getAddress() != null) {
-            student.setAddress(studentDto.getAddress());
-        }
+        student.setSectionProgress(studentDto.getSectionProgress().stream()
+                .map(convertStudentSectionProgressService::convertDtoToEntity)
+                .collect(Collectors.toList()));
 
-        if(studentDto.getBio() != null) {
-            student.setBio(studentDto.getBio());
-        }
+        student.setReviews(studentDto.getReviews().stream()
+                .map(x-> convertCourseReviewService.convertCourseReviewDtoToCourseReview(x))
+                .collect(Collectors.toList()));
 
         return student;
     }
 
-    public Student update(StudentDto studentDto , Student student)
-    {
 
-        if(studentDto.getFirstName() != null) {
-            student.setFirstName(studentDto.getFirstName());
-        }
+    public Student update(StudentDto studentDto, Student student) {
+        student.setPassword(studentDto.getPassword());
+        student.setEmail(studentDto.getEmail());
+        student.setFirstName(studentDto.getFirstName());
+        student.setLastName(studentDto.getLastName());
+        student.setProfilePicture(studentDto.getProfilePicture());
+        student.setPhoneNumber(studentDto.getPhoneNumber());
+        student.setAddress(studentDto.getAddress());
+        student.setBio(studentDto.getBio());
 
-        if(studentDto.getLastName() != null) {
-            student.setLastName(studentDto.getLastName());
-        }
-
-        if(studentDto.getEmail() != null) {
-            student.setEmail(studentDto.getEmail());
-        }
-
-        if(studentDto.getPassword() != null) {
-            student.setPassword(studentDto.getPassword());
-        }
-
-        if(studentDto.getProfilePicture() != null) {
-            student.setProfilePicture(studentDto.getProfilePicture());
-        }
-
-        if(studentDto.getPhoneNumber() != null) {
-            student.setPhoneNumber(studentDto.getPhoneNumber());
-        }
-
-        if(studentDto.getAddress() != null) {
-            student.setAddress(studentDto.getAddress());
-        }
-
-        if(studentDto.getBio() != null) {
-            student.setBio(studentDto.getBio());
-        }
+        // Update other fields similarly based on your logic
 
         return student;
     }
