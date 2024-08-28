@@ -43,7 +43,8 @@ public class StudentService {
     public StudentDto updateStudent(Long id , StudentDto updateStudentDto)
     {
         Student student = convertStudentService.convertStudentDtoToStudent( getStudentById(id));
-        studentRepository.save(student);
+        Student updateStudent = convertStudentService.update(updateStudentDto,student);
+        studentRepository.save(updateStudent);
         return updateStudentDto;
     }
 

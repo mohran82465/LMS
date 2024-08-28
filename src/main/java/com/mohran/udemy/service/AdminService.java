@@ -41,8 +41,17 @@ public class AdminService {
         return adminDto;
     }
 
+    public AdminDto updateAdmin(Long id , AdminDto adminDto)
+    {
+        Admin admin = convertAdminService.convertAdminDtoToAdmin(getAdminById(id));
+        Admin updateAdmin = convertAdminService.update(adminDto,admin);
+        adminRepository.save(updateAdmin);
+        return adminDto;
+
+    }
     public void deleteAdmin(Long id)
     {
+        AdminDto adminDto = getAdminById(id);
         adminRepository.deleteById(id);
     }
 

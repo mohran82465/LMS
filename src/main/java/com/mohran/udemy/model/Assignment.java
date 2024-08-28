@@ -16,7 +16,6 @@ import java.util.Date;
 public class Assignment  extends Section{
 
     private String name ;
-    private String description;
     private Date deadline;
     private String instructions;
     private Date createAt;

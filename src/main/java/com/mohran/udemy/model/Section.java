@@ -17,7 +17,7 @@ import java.util.List;
 public abstract class Section {
     @Id
     private Long id;
-    private String title ;
+    private String Sectiontitle ;
 
     @ManyToOne
     private Course course;

@@ -91,4 +91,43 @@ public class ConvertStudentService {
 
         return student;
     }
+
+    public Student update(StudentDto studentDto , Student student)
+    {
+
+        if(studentDto.getFirstName() != null) {
+            student.setFirstName(studentDto.getFirstName());
+        }
+
+        if(studentDto.getLastName() != null) {
+            student.setLastName(studentDto.getLastName());
+        }
+
+        if(studentDto.getEmail() != null) {
+            student.setEmail(studentDto.getEmail());
+        }
+
+        if(studentDto.getPassword() != null) {
+            student.setPassword(studentDto.getPassword());
+        }
+
+        if(studentDto.getProfilePicture() != null) {
+            student.setProfilePicture(studentDto.getProfilePicture());
+        }
+
+        if(studentDto.getPhoneNumber() != null) {
+            student.setPhoneNumber(studentDto.getPhoneNumber());
+        }
+
+        if(studentDto.getAddress() != null) {
+            student.setAddress(studentDto.getAddress());
+        }
+
+        if(studentDto.getBio() != null) {
+            student.setBio(studentDto.getBio());
+        }
+
+        return student;
+    }
+
 }

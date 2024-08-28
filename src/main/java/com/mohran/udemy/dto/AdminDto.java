@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 @Setter
 @Data
 public class AdminDto {
-
+    @NotEmpty
+    @NotBlank
     private Long id ;
     @Email
     @NotEmpty

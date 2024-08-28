@@ -41,7 +41,8 @@ public class InstructorService {
     }
     public InstructorDto updateInstructor(Long id , InstructorDto updateInstructorDto){
         Instructor instructor = convertInstructorService.convertInstructorDtoToInstructor(getInstructorById(id));
-        instructorRepository.save(instructor);
+        Instructor updatedInstructor = convertInstructorService.update(updateInstructorDto,instructor);
+        instructorRepository.save(updatedInstructor);
         return updateInstructorDto;
     }
 
